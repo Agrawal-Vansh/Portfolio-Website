@@ -10,12 +10,29 @@ import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 
 const Index = () => {
- 
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    // Set dark mode by default
+    document.documentElement.classList.add('dark');
+  }, []);
+
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+    if (isDark) {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden noise-bg">
       <ParticleBackground />
 
-      <Navbar/>
+      <Navbar isDark={isDark} toggleTheme={toggleTheme} />
 
       <main>
         <HeroSection />
