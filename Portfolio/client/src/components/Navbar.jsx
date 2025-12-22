@@ -122,7 +122,7 @@ const Navbar = ({ isDark, toggleTheme }) => {
               <span
                 className="
                   absolute bottom-0 left-1/2 -translate-x-1/2
-                  w-0 h-[2px]
+                  w-0 h-0.5
                   bg-teal-400
                   shadow-[0_0_10px_rgba(20,184,166,1)]
                   group-hover:w-1/2

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import ParticleBackground from '../components/ParticleBackground';
-import Navbar from '../\/components/Navbar';
+import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
 import AboutSection from '../components/AboutSection';
 import SkillsSection from '../components/SkillsSection';
@@ -13,26 +13,23 @@ const Index = () => {
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    // Set dark mode by default
-    document.documentElement.classList.add('dark');
-  }, []);
-
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    if (isDark) {
-      document.documentElement.classList.remove('dark');
-      document.documentElement.classList.add('light');
-    } else {
-      document.documentElement.classList.remove('light');
-      document.documentElement.classList.add('dark');
-    }
-  };
+    const root = document.documentElement;
+    root.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  }, [isDark]);
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden noise-bg">
-      <ParticleBackground />
-
-      <Navbar isDark={isDark} toggleTheme={toggleTheme} />
+    <div
+      className="
+        relative min-h-screen overflow-x-hidden
+        bg-white text-gray-900
+        dark:bg-gray-900 dark:text-white
+      "
+    >
+    <ParticleBackground/>
+      <Navbar
+        isDark={isDark}
+        toggleTheme={() => setIsDark((prev) => !prev)}
+      />
 
       <main>
         <HeroSection />
