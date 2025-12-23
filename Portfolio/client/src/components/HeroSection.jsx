@@ -55,11 +55,12 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      className=" mt-8
-        relative min-h-screen flex items-center justify-center overflow-hidden
+      className=" relative mt-8
+         min-h-screen flex items-center justify-center overflow-hidden
         text-gray-900 dark:text-white
       "
     >
+    
       <div
         className="
           absolute inset-0 pointer-events-none

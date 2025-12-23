@@ -105,7 +105,7 @@ if (card) {
     <section
       ref={sectionRef}
       id="about"
-      className="relative py-28 "
+      className=" py-28"
     >
 
       <div
