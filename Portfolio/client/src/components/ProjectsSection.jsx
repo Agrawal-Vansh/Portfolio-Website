@@ -3,11 +3,14 @@ import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import ProjectCard from './ui/ProjectCard';
 import { projectsData } from '../data/projectsData';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const GAP = 40;
-const REVEAL_SCROLL = 400; // scroll to reveal a card
-const STACK_SCROLL = 300;  // scroll to stack previous card
+const PEEK_OFFSET = 60;
+const TITLE_HEIGHT = 72;
+const REVEAL_SCROLL = 400;
+const STACK_SCROLL = 300;
 
 const ProjectSection = () => {
   const sectionRef = useRef(null);
@@ -17,7 +20,7 @@ const ProjectSection = () => {
     const ctx = gsap.context(() => {
       const cards = cardsRef.current;
 
-      let offsets = [];
+      const offsets = [];
       let currentOffset = 0;
 
       cards.forEach((card, i) => {
@@ -25,8 +28,10 @@ const ProjectSection = () => {
         currentOffset += card.offsetHeight + GAP;
       });
 
-      gsap.set(cards, {
-        y: (i) => offsets[i],
+      cards.forEach((card, i) => {
+        gsap.set(card, {
+          y: offsets[i] - i * PEEK_OFFSET,
+        });
       });
 
       let accumulatedScroll = 0;
@@ -41,8 +46,12 @@ const ProjectSection = () => {
           end: `top+=${accumulatedScroll + REVEAL_SCROLL} top`,
           scrub: true,
           onUpdate: (self) => {
+            const anchorY = (i - 1) * GAP + TITLE_HEIGHT;
+
             gsap.set(currentCard, {
-              y: offsets[i] * (1 - self.progress),
+              y:
+                offsets[i] -
+                self.progress * (offsets[i] - anchorY),
             });
           },
         });
@@ -56,7 +65,9 @@ const ProjectSection = () => {
           scrub: true,
           onUpdate: (self) => {
             gsap.set(prevCard, {
-              y: (i - 1) * GAP * self.progress,
+              y:
+                ((i - 1) * GAP - PEEK_OFFSET) *
+                self.progress,
             });
           },
         });
@@ -78,10 +89,15 @@ const ProjectSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-red-400"
-      style={{ height: '400vh' }}
+      className="relative h-200"
     >
-      <div className="h-screen flex items-start pt-24">
+      <span className=" px-4 py-1.5 rounded-full flex  text-center justify-center  dark:bg-black/40 dark:backdrop-blur dark:border-teal-400/30 dark:text-teal-300
+                bg-teal-50 border-teal-200 text-teal-700
+                 border border-accent/30 text-accent text-xl font-medium mb-4">
+          Projects
+          </span>
+
+      <div className="h-screen flex items-start pt-24 ">
         <div className="relative w-full max-w-6xl mx-auto">
           {projectsData.map((project, index) => (
             <ProjectCard

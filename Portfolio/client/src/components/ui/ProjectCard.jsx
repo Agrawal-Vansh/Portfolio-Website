@@ -7,8 +7,8 @@ const ProjectCard = ({ project, cardRef }) => {
         rounded-3xl
         border border-white/10
         bg-black/80 backdrop-blur-xl
-        shadow-2xl
         flex overflow-hidden
+            shadow-[0_0_0_2px_rgba(20,184,166,0.25),0_0_16px_rgba(20,184,166,0.6)]        
       "
     >
       {/* LEFT CONTENT */}
