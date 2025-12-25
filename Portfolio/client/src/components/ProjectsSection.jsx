@@ -1,50 +1,13 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-
+import ProjectCard from './ui/ProjectCard';
+import { projectsData } from '../data/projectsData';
 gsap.registerPlugin(ScrollTrigger);
 
-const projects = [
-  {
-    title: 'Luzz',
-    description: 'A fun side project to cleanse your LinkedIn feed',
-    points: [
-      'Browser extension that removes cringe from LinkedIn posts',
-      'Passes post to AI → cleans it → replaces original',
-      'Widget to toggle between original & cleaned post',
-    ],
-    tech: ['Next.js', 'JavaScript'],
-    github: '#',
-    live: '#',
-    gradient: 'from-indigo-900 via-purple-900 to-black',
-  },
-  {
-    title: 'Documentation Assistant',
-    description: 'AI-powered documentation helper',
-    points: [
-      'Reads large docs instantly',
-      'Context-aware answers',
-      'Export summaries',
-    ],
-    tech: ['React', 'OpenAI'],
-    github: '#',
-    live: '#',
-    gradient: 'from-orange-900 via-red-900 to-black',
-  },
-  {
-    title: 'Sage',
-    description: 'Smart research & productivity assistant',
-    points: [
-      'Multi-source research',
-      'AI summaries',
-      'Citation support',
-    ],
-    tech: ['Next.js', 'AI'],
-    github: '#',
-    live: '#',
-    gradient: 'from-emerald-900 via-teal-900 to-black',
-  },
-];
+const GAP = 40;
+const REVEAL_SCROLL = 400; // scroll to reveal a card
+const STACK_SCROLL = 300;  // scroll to stack previous card
 
 const ProjectSection = () => {
   const sectionRef = useRef(null);
@@ -54,21 +17,58 @@ const ProjectSection = () => {
     const ctx = gsap.context(() => {
       const cards = cardsRef.current;
 
-      // stack cards vertically
-      gsap.set(cards, {
-        y: (i) => i * window.innerHeight * 0.7,
+      let offsets = [];
+      let currentOffset = 0;
+
+      cards.forEach((card, i) => {
+        offsets[i] = currentOffset;
+        currentOffset += card.offsetHeight + GAP;
       });
 
-      gsap.to(cards, {
-        y: (i) => i * 20, // compressed stack
-        ease: 'none',
-        scrollTrigger: {
+      gsap.set(cards, {
+        y: (i) => offsets[i],
+      });
+
+      let accumulatedScroll = 0;
+
+      for (let i = 1; i < cards.length; i++) {
+        const prevCard = cards[i - 1];
+        const currentCard = cards[i];
+
+        ScrollTrigger.create({
           trigger: sectionRef.current,
-          start: 'top top',
-          end: `+=${cards.length * 400}`,
+          start: `top+=${accumulatedScroll} top`,
+          end: `top+=${accumulatedScroll + REVEAL_SCROLL} top`,
           scrub: true,
-          pin: true,
-        },
+          onUpdate: (self) => {
+            gsap.set(currentCard, {
+              y: offsets[i] * (1 - self.progress),
+            });
+          },
+        });
+
+        accumulatedScroll += REVEAL_SCROLL;
+
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: `top+=${accumulatedScroll} top`,
+          end: `top+=${accumulatedScroll + STACK_SCROLL} top`,
+          scrub: true,
+          onUpdate: (self) => {
+            gsap.set(prevCard, {
+              y: (i - 1) * GAP * self.progress,
+            });
+          },
+        });
+
+        accumulatedScroll += STACK_SCROLL;
+      }
+
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: `+=${accumulatedScroll}`,
+        pin: true,
       });
     }, sectionRef);
 
@@ -79,76 +79,16 @@ const ProjectSection = () => {
     <section
       ref={sectionRef}
       className="relative bg-red-400"
-      style={{ height: `${projects.length * 120}vh` }}
+      style={{ height: '400vh' }}
     >
-      <div className="h-screen flex items-center justify-center">
-        <div className="relative w-full max-w-6xl h-[70vh]">
-          {projects.map((project, index) => (
-            <div
+      <div className="h-screen flex items-start pt-24">
+        <div className="relative w-full max-w-6xl mx-auto">
+          {projectsData.map((project, index) => (
+            <ProjectCard
               key={index}
-              ref={(el) => (cardsRef.current[index] = el)}
-              className="
-                absolute inset-0
-                rounded-3xl
-                border border-white/10
-                bg-black/80 backdrop-blur-xl
-                shadow-2xl
-                flex overflow-hidden
-              "
-            >
-              {/* LEFT CONTENT */}
-              <div className="w-1/2 p-10 flex flex-col justify-between text-white">
-                <div>
-                  <h2 className="text-4xl font-bold mb-4">{project.title}</h2>
-                  <p className="text-white/70 mb-6">
-                    {project.description}
-                  </p>
-
-                  <ul className="space-y-3 text-white/80">
-                    {project.points.map((point, i) => (
-                      <li key={i}>– {point}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="space-y-6">
-                  <div className="flex gap-3 flex-wrap">
-                    {project.tech.map((t, i) => (
-                      <span
-                        key={i}
-                        className="px-4 py-1 rounded-full border border-white/20 text-sm"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex gap-4">
-                    <a
-                      href={project.github}
-                      className="px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 transition"
-                    >
-                      GitHub
-                    </a>
-                    <a
-                      href={project.live}
-                      className="px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 transition"
-                    >
-                      Live Site ↗
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              {/* RIGHT PREVIEW */}
-              <div
-                className={`w-1/2 flex items-center justify-center bg-gradient-to-br ${project.gradient}`}
-              >
-                <span className="text-6xl font-bold text-white/30">
-                  {project.title}
-                </span>
-              </div>
-            </div>
+              project={project}
+              cardRef={(el) => (cardsRef.current[index] = el)}
+            />
           ))}
         </div>
       </div>
