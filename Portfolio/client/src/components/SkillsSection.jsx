@@ -20,7 +20,7 @@ const SkillsSection = () => {
           className="text-center mb-12"
         >
          
-          <span className="inline-block px-4 py-1.5 rounded-full   dark:bg-black/40 dark:backdrop-blur dark:border-teal-400/30 dark:text-teal-300
+          <span className="flex  text-center justify-center px-4 py-1.5 rounded-full   dark:bg-black/40 dark:backdrop-blur dark:border-teal-400/30 dark:text-teal-300
                 bg-teal-50 border-teal-200 text-teal-700
                  border border-accent/30 text-accent text-xl font-medium mb-4">
             Technical Skills
