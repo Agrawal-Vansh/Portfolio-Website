@@ -17,6 +17,15 @@ const ProjectSection = () => {
   const cardsRef = useRef([]);
 
   useEffect(() => {
+     const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+  if (isMobile) {
+    // Reset styles so cards stack normally
+    cardsRef.current.forEach((card) => {
+      if (card) gsap.set(card, { clearProps: 'all' });
+    });
+    return;
+  }
     const ctx = gsap.context(() => {
       const cards = cardsRef.current;
 
@@ -90,7 +99,7 @@ const ProjectSection = () => {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative h-200"
+      className="relative md:h-[200vh]"
     >
       <span className=" px-4 py-1.5 rounded-full flex  text-center justify-center  dark:bg-black/40 dark:backdrop-blur dark:border-teal-400/30 dark:text-teal-300
                 bg-teal-50 border-teal-200 text-teal-700
@@ -98,8 +107,8 @@ const ProjectSection = () => {
           Projects
           </span>
 
-      <div className="h-screen flex items-start pt-24 ">
-        <div className="relative w-full max-w-6xl mx-auto">
+      <div className="min-h-screen flex items-start pt-24 ">
+<div className="relative w-full max-w-6xl mx-auto flex flex-col gap-12 md:gap-0 p-6">
           {projectsData.map((project, index) => (
             <ProjectCard
               key={index}

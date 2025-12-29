@@ -10,13 +10,18 @@ const AboutSection = () => {
   const cardRef= useRef(null); 
   const [active, setActive] = useState(false);
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
+  const [mobileRevealed, setMobileRevealed] = useState(false);
 
   const posRef = useRef({ x: 0, y: 0 });
   const rafRef = useRef(null);
 
   const [proximity, setProximity] = useState(0);
 
+  const isMobile = useRef(window.matchMedia("(max-width: 768px)").matches);
+
+
   useEffect(() => {
+      if (isMobile.current) return; 
     const section = sectionRef.current;
     if (!section) return;
 
@@ -36,6 +41,7 @@ const AboutSection = () => {
   }, []);
 
   useEffect(() => {
+    if (isMobile.current) return;
     const animate = () => {
       if (!active) {
         if (wandRef.current) wandRef.current.style.opacity = 0;
@@ -96,10 +102,19 @@ if (card) {
     
   }, [cursor, active]);
 
+  const overlayOpacity = isMobile.current
+  ? mobileRevealed ? 1 : 0
+  : clamp(proximity * 1.2, 0, 1);
 
-  const overlayOpacity = clamp(proximity * 1.2, 0, 1);
-  const overlayBlur = lerp(14, 0, clamp(proximity * 1.1, 0, 1));
-  const baseDim = lerp(1, 0.9, proximity);
+const overlayBlur = isMobile.current
+  ? mobileRevealed ? 0 : 14
+  : lerp(14, 0, clamp(proximity * 1.1, 0, 1));
+
+const baseDim = isMobile.current
+  ? 1
+  : lerp(1, 0.9, proximity);
+
+
 
   return (
     <section
@@ -216,10 +231,16 @@ if (card) {
 
         {/* Image */}
         <div className="md:col-span-5">
-          <div
-            ref={imageRef}
-            className="relative rounded-2xl overflow-hidden border border-neutral-800 shadow-2xl"
-          >
+         <div
+  ref={imageRef}
+  className="relative rounded-2xl overflow-hidden border border-neutral-800 shadow-2xl cursor-pointer"
+  onClick={() => {
+    if (isMobile.current) {
+      setMobileRevealed((prev) => !prev);
+    }
+  }}
+>
+
             {/* Profile 1 – clear initially */}
             <img
               src="/images/profile1.jpg"
@@ -235,7 +256,7 @@ if (card) {
             <img
               src="/images/profile2.jpg"
               alt="Profile 2"
-              className="absolute inset-0 w-full h-90 object-fit"
+              className="absolute inset-0 w-full h-auto md:h-90 object-fit"
               style={{
                 opacity: overlayOpacity,
                 filter: `blur(${overlayBlur}px) contrast(${lerp(
