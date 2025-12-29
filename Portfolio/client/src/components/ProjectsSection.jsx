@@ -89,6 +89,7 @@ const ProjectSection = () => {
   return (
     <section
       ref={sectionRef}
+      id="projects"
       className="relative h-200"
     >
       <span className=" px-4 py-1.5 rounded-full flex  text-center justify-center  dark:bg-black/40 dark:backdrop-blur dark:border-teal-400/30 dark:text-teal-300

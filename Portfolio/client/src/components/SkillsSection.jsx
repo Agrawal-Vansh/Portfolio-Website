@@ -10,6 +10,7 @@ const SkillsSection = () => {
     <section className="relative py-24
      text-zinc-900
       dark:bg-transparent dark:text-white"
+      id="skills"
     >
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}

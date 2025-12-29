@@ -63,7 +63,7 @@ const handleSubmit = async (e) => {
 
 
   return (
-  <section className="relative py-24 px-4 flex flex-col items-center">
+  <section id="contact" className="relative py-24 px-4 flex flex-col items-center">
   
   {/* BADGE */}
   <span
