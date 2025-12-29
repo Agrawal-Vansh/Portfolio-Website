@@ -8,6 +8,7 @@ import TimelineSection from '../components/TimelineSection';
 import ProjectsSection from '../components/ProjectsSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
+import PageLoader from '../components/PageLoader';
 
 const Index = () => {
   const [isDark, setIsDark] = useState(true);
@@ -18,6 +19,7 @@ const Index = () => {
   }, [isDark]);
 
   return (
+    <PageLoader>
     <div
       className="
         relative min-h-screen overflow-x-hidden
@@ -42,6 +44,7 @@ const Index = () => {
 
       <Footer />
     </div>
+    </PageLoader>
   );
 };
 
