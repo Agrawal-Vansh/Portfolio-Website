@@ -22,7 +22,7 @@ const Loader = ({ onComplete }) => {
   return (
     <motion.div
       className="
-        fixed inset-0 z-[999]
+        fixed inset-0 z-[999] 
         flex flex-col items-center justify-center
         bg-[radial-gradient(circle_at_70%_80%,rgba(99,102,241,0.18),transparent_60%),linear-gradient(135deg,#020617,#020617)]
       "
@@ -115,7 +115,8 @@ const PageLoader = ({ children }) => {
         {loading && <Loader onComplete={() => setLoading(false)} />}
       </AnimatePresence>
 
-      <motion.div
+      <motion.div   className="relative min-h-screen"
+
         initial={{ opacity: 0 }}
         animate={{ opacity: loading ? 0 : 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}

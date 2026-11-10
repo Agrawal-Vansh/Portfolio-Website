@@ -168,8 +168,9 @@ const ParticleBackground = () => {
   };
 
   const resizeCanvas = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+   canvas.width = document.documentElement.clientWidth;
+canvas.height = document.documentElement.clientHeight;
+
   };
 
   const createParticles = () => {

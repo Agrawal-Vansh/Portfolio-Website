@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
-
 .card {
   background: radial-gradient(
     120% 120% at 50% 0%,

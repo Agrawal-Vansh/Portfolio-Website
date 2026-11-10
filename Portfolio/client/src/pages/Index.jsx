@@ -27,11 +27,11 @@ const Index = () => {
         dark:bg-gray-900 dark:text-white
       "
     >
-    <ParticleBackground/>
       <Navbar
         isDark={isDark}
         toggleTheme={() => setIsDark((prev) => !prev)}
-      />
+        />
+        <ParticleBackground/>
 
       <main>
         <HeroSection />

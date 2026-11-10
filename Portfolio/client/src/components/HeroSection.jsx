@@ -55,7 +55,7 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      className=" relative mt-8
+      className=" relative 
          min-h-screen flex items-center justify-center overflow-hidden
         text-gray-900 dark:text-white
       "
@@ -69,7 +69,7 @@ const HeroSection = () => {
         "
       />
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mt-16 mx-auto px-4 relative z-10">
         <motion.div
           variants={containerVariants}
           initial="hidden"
